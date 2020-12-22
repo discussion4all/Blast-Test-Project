@@ -1,5 +1,5 @@
-import login from '../components/login';
-import dashboard from '../components/dashboard';
+import login from '../components/login/login';
+import dashboard from '../components/dashboard/dashboard';
 
 const routes = [
     {
