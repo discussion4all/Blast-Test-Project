@@ -1,5 +1,6 @@
 import login from '../components/login/login';
 import dashboard from '../components/dashboard/dashboard';
+import audio from '../components/dashboard/audio';
 
 const routes = [
     {
@@ -9,6 +10,10 @@ const routes = [
     {
         path : "/dashboard",
         Component : dashboard
+    },
+    {
+        path : "/audio",
+        Component : audio
     }
 ];
 
