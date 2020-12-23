@@ -1,6 +1,5 @@
 import config from "../config";
 import axios from "axios";
-import {  useHistory } from "react-router-dom";
 import setAuthToken from "../utils/setAuthToken";
 
 const api_url = config.server.ip + config.server.port+"/";
