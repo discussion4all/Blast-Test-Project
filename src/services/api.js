@@ -22,6 +22,16 @@ const ApiServiceCall = {
         .catch(function (response) {
            return response;
         });
+    },
+    getOneQuestionSet : async function(value){
+        //set token in header option
+        setAuthToken(); 
+        return await axios.post(api_url + "getOneQuestionSet",value).then(function (response) {
+            return response
+        })
+        .catch(function (response) {
+           return response;
+        });
     }
 }
 

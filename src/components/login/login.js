@@ -23,7 +23,7 @@ const Login = () => {
             <Header/>
             	<div className="container">
             		<div className="vertical-center">
-            			<button className="button" onClick={onSubmit}>Login</button>
+            			<button className="button" onClick={onSubmit}>Start Exam</button>
             		</div>
             	</div>
             <Footer/>
