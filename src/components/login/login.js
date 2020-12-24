@@ -3,13 +3,15 @@ import Footer from "../common/footer";
 import Header from "../common/header";
 import ApiServiceCall from "../../services/api";
 import {  useHistory } from "react-router-dom";
-const Login = () => {
+
+const Login = (props) => {
 	const History =  useHistory();
 	const onSubmit = async () => {
 		try {
 			var result = await ApiServiceCall.login({});
 			if(result.data.err === null){
 				window.localStorage.setItem("token", result.data.data);
+				props.dataprops.setToken(result.data.data)
 				History.push('/dashboard')
 			}else{
 				alert("Something wrong!")
