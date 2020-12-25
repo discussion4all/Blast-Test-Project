@@ -73,11 +73,10 @@ const Dashboard = (props) => {
 		setIsHint(false)
 		if(quizType === "easytohard"){
 			setCheck_Answer("")
-			console.log(questionNumber + 1 , allQuestion.Questions.length,questionNumber + 1 > allQuestion.Questions.length)
 			if(questionNumber + 1 >= allQuestion.Questions.length){
 				setQuestionNumber(0)
-				setDatasetNumber(datasetNumber+1)
 				getQuestionData(datasetNumber+1);
+				setDatasetNumber(datasetNumber+1)
 			}else{
 				props.dataprops.setOneQuestion(allQuestion.Questions[questionNumber+1])
 				setQuestionNumber(questionNumber+1)
@@ -89,17 +88,13 @@ const Dashboard = (props) => {
 			}else{
 				if(questionNumber + 1 >= props.dataprops.questionData.allQuestion.Questions.length){
 					setQuestionNumber(0)
-					setDatasetNumber(datasetNumber+1)
 					getQuestionData(datasetNumber+1);
-				}else{
 					setDatasetNumber(datasetNumber+1)
+				}else{
 					setQuestionNumber(questionNumber + 1)
 					props.dataprops.setOneQuestion(allQuestion.Questions[questionNumber])
 				}
-				
-				
 			}
-			
 		}
 	}
 	
