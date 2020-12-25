@@ -300,7 +300,11 @@ const Dashboard = (props) => {
 			console.log("Error:",error);
 		}
 		
-    }
+	}
+	
+	const closeSession = () => {
+		History.push("/");
+	}
 	
     return(
         <>
@@ -422,6 +426,7 @@ const Dashboard = (props) => {
 												<h4>Pass Two:</h4>
 												<p htmlFor="lname">Correct Answer= {correctPracticeAnswer.hardCorrect}</p>
 												<p htmlFor="lname">Incorrect Answer= {correctPracticeAnswer.hardIncorrect}</p>
+												<input type="button" className="submit-btn" onClick={()=>closeSession()} value="Close Session"/>
 											</div>
 										)
 									}
