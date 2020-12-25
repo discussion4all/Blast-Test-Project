@@ -12,5 +12,5 @@ const myLogger =(store)=> (next) => (action)=>{
 export default createStore(combineReducers({
 	user,
 	questionData
-}) ,{} , applyMiddleware(myLogger,logger,thunk,promise)
+}) ,{} , applyMiddleware(thunk,promise)
  );

@@ -5,7 +5,7 @@ import {connect,Provider} from 'react-redux'
 import './App.css';
 import "./style/css/style.css";
 import {setToken,setName} from './Actions/UserAction'
-import {setAllQuestion,setOneQuestion,setquizType} from './Actions/QuestionAction'
+import {setAllQuestion,setOneQuestion,setquizType,setAllAnswers} from './Actions/QuestionAction'
 
 
 function App(props) {
@@ -50,6 +50,8 @@ const mapDispatchToProps = (dispatch) =>{
       dispatch(setAllQuestion(allQuestion))
     },setOneQuestion:(oneQuestion)=>{
       dispatch(setOneQuestion(oneQuestion))
+    },setAllAnswers :(answers)=>{
+      dispatch(setAllAnswers(answers))
     }
   }
 }

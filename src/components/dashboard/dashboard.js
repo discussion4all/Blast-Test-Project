@@ -4,11 +4,11 @@ import Header from "../common/header";
 import PreLoading from "../common/preloading";
 import ApiServiceCall from "../../services/api";
 import {  useHistory } from "react-router-dom";
+import Answerdisplay from "./answerdisplay"
 
 const Dashboard = (props) => {
-	console.log("props",props)
 	const History =  useHistory();
-	if (localStorage.getItem("token") === null) {
+	if (props.dataprops.user.token === null || props.dataprops.user.token === "") {
 	    History.push("/");
 	}
 	const [startloader, setStartloader] = useState(false);
@@ -35,7 +35,7 @@ const Dashboard = (props) => {
 				setQuestion(getdata.data.data[0].Questions,props.dataprops.questionData.quizType)
 				setStartloader(false);
 			}else{
-				History.push("/audio");
+				History.push("/answer");
 			}
 		}else{
 			console.log("Somthing wrong")
@@ -51,7 +51,6 @@ const Dashboard = (props) => {
 			}else{
 				props.dataprops.setOneQuestion(qdataset[questionNumber])
 			}
-			
 		}
 	}
 	const changeExamType = async(e)=>{
@@ -61,19 +60,72 @@ const Dashboard = (props) => {
 	}
 	const checkAnswer = async()=>{
 		setAnswerAction(true);
-
+		
 		if(props.dataprops.questionData.oneQuestion.Answer.replace(/\s+/g,' ').trim().toLowerCase() === userAnswer.replace(/\s+/g,' ').trim().toLowerCase()){
 			setCheck_Answer(true)
+			setAnswerResult(true);
+			setUserAnswer("")
 		}else{
 			setCheck_Answer(false)
+			setAnswerResult(false);
+			setUserAnswer("")
+		}
+		
+	}
+	const changeanswer = (answer)=>{
+		setUserAnswer(answer);
+	}
+	const saveLogForUser = async()=>{
+	var {oneQuestion }=props.dataprops.questionData;
+		var reqObject = {
+			LearnerID: props.dataprops.user.id,
+			SourceID : oneQuestion.SourceID,
+			ChapterID : oneQuestion.ChapterID,
+			PageNumber : oneQuestion.PageNumber,
+			isHint : isHint,
+			answer : check_Answer,
+			isExplaination:isExplaination
+		}
+		ApiServiceCall.saveLogForUser(reqObject)
+	}
+	const setAnswerResult = async(answerstatus)=>{
+		var {answers,quizType}= props.dataprops.questionData;
+
+		if(answers.length <= 0){
+			var ans = {
+				QuestionSet : datasetNumber,
+				quizType : quizType,
+				answers:[{questionNumber : questionNumber,answer:answerstatus}]
+			}
+			props.dataprops.setAllAnswers([ans])	
+		}else{
+			const dataans = answers.find((item) => item.QuestionSet === datasetNumber);
+			if(dataans === undefined){
+				var ans = {
+					QuestionSet : datasetNumber,
+					quizType : quizType,
+					answers:[{questionNumber : questionNumber,answer:answerstatus}]
+				}
+				answers.push(ans)
+				props.dataprops.setAllAnswers(answers)
+			}else{
+				answers.map((data_ans,index)=>{
+					if(data_ans.QuestionSet === datasetNumber){
+						var onedata =  {questionNumber : questionNumber,answer:answerstatus};
+						dataans.answers.push(onedata)
+						props.dataprops.setAllAnswers(answers)	
+					}
+				});
+			}
 		}
 	}
 	const next_Question = async()=>{
 		var {quizType,allQuestion } = props.dataprops.questionData;
+		saveLogForUser();
 		setIsExplaination(false)
-		
 		setAnswerAction(false)
 		setIsHint(false)
+		
 		if(quizType === "easytohard"){
 			setCheck_Answer("")
 			if(questionNumber + 1 >= allQuestion.Questions.length){
@@ -171,7 +223,7 @@ const Dashboard = (props) => {
 										    </div>
 										    <div className="cut-box">
 											    <label htmlFor="lname">Answer</label>
-											    <input className="text-box-cust" onChange={(e) => setUserAnswer(e.target.value)} type="text" id="answer" name="lastname" placeholder="Your answer"/>
+											    <input className="text-box-cust" onChange={(e) => changeanswer(e.target.value) } value={userAnswer} type="text" id="answer" name="lastname" placeholder="Your answer"/>
 											    {isHint && <><label htmlFor="fname">Hint :-  </label><span >{props.dataprops.questionData.oneQuestion.Hint}</span ></> }
 											    
 											    <br/>
@@ -210,8 +262,10 @@ const Dashboard = (props) => {
 						            }
 								</form>
 							)}
+
 						</div>
             		</div>
+            		
             	</div>
             <Footer/>
         </>
