@@ -1,8 +1,8 @@
 const userReducer = (state = {
 	name:"Hemin",
-	token:""
+	token:"",
+	id: 1607
 },action) =>{
-	console.log(action.type,action.payload)
 	switch(action.type){
 		case "SET_NAME_FULFILLED":
 			state={

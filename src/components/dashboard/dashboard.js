@@ -4,15 +4,16 @@ import Header from "../common/header";
 import PreLoading from "../common/preloading";
 import ApiServiceCall from "../../services/api";
 import {  useHistory } from "react-router-dom";
+
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 
+import Answerdisplay from "./answerdisplay"
 
 const Dashboard = (props) => {
-	console.log("props",props)
 	const History =  useHistory();
-	if (localStorage.getItem("token") === null) {
+	if (props.dataprops.user.token === null || props.dataprops.user.token === "") {
 	    History.push("/");
 	}
 	const [startloader, setStartloader] = useState(false);
@@ -49,7 +50,7 @@ const Dashboard = (props) => {
 				setStartloader(false);
 				setShowOptions(true);
 			}else{
-				History.push("/audio");
+				History.push("/answer");
 			}
 		}else{
 			console.log("Somthing wrong")
@@ -65,7 +66,6 @@ const Dashboard = (props) => {
 			}else{
 				props.dataprops.setOneQuestion(qdataset[questionNumber])
 			}
-			
 		}
 	}
 	const changeExamType = async(e)=>{
@@ -76,9 +76,10 @@ const Dashboard = (props) => {
 	}
 	const checkAnswer = async(sessionPass)=>{
 		setAnswerAction(true);
-
+		setUserAnswer("");
 		if(props.dataprops.questionData.oneQuestion.Answer.replace(/\s+/g,' ').trim().toLowerCase() === userAnswer.replace(/\s+/g,' ').trim().toLowerCase()){
 			setCheck_Answer(true)
+			setAnswerResult(true);
 			if(sessionPass !== undefined){
 				if(practicePass === "easy"){
 					console.log("correct anser practice---",correctPracticeAnswer);	
@@ -89,17 +90,68 @@ const Dashboard = (props) => {
 			}
 		}else{
 			setCheck_Answer(false)
+			setAnswerResult(false);
 			if(sessionPass !== undefined){
 				if(practicePass === "easy"){
 					setCorrectPracticeAnswer({...correctPracticeAnswer,easyIncorrect:correctPracticeAnswer.easyIncorrect+1});
 				}else{
 					setCorrectPracticeAnswer({...correctPracticeAnswer,hardIncorrect:correctPracticeAnswer.hardIncorrect+1});
+
 				}
+			}
+		}
+		
+	}
+	
+	const changeanswer = (answer)=>{
+		setUserAnswer(answer);
+	}
+	const saveLogForUser = async()=>{
+	var {oneQuestion }=props.dataprops.questionData;
+		var reqObject = {
+			LearnerID: props.dataprops.user.id,
+			SourceID : oneQuestion.SourceID,
+			ChapterID : oneQuestion.ChapterID,
+			PageNumber : oneQuestion.PageNumber,
+			isHint : isHint,
+			answer : check_Answer,
+			isExplaination:isExplaination
+		}
+		ApiServiceCall.saveLogForUser(reqObject)
+	}
+	const setAnswerResult = async(answerstatus)=>{
+		var {answers,quizType}= props.dataprops.questionData;
+
+		if(answers.length <= 0){
+			var ans = {
+				QuestionSet : datasetNumber,
+				quizType : quizType,
+				answers:[{questionNumber : questionNumber,answer:answerstatus}]
+			}
+			props.dataprops.setAllAnswers([ans])	
+		}else{
+			const dataans = answers.find((item) => item.QuestionSet === datasetNumber);
+			if(dataans === undefined){
+				var ans = {
+					QuestionSet : datasetNumber,
+					quizType : quizType,
+					answers:[{questionNumber : questionNumber,answer:answerstatus}]
+				}
+				answers.push(ans)
+				props.dataprops.setAllAnswers(answers)
+			}else{
+				answers.map((data_ans,index)=>{
+					if(data_ans.QuestionSet === datasetNumber){
+						var onedata =  {questionNumber : questionNumber,answer:answerstatus};
+						dataans.answers.push(onedata)
+						props.dataprops.setAllAnswers(answers)	
+					}
+				});
 			}
 		}
 	}
 	const next_Question = async(sessionType)=>{
-
+	
 		if(sessionType !== undefined && sessionType === "practiceSession"){
 			setIsExplaination(false)
 			setAnswerAction(false)
@@ -108,44 +160,42 @@ const Dashboard = (props) => {
 			setUserAnswer("");
 			getRandomQuestion();
 		}else{
-				var {quizType,allQuestion } = props.dataprops.questionData;
-				setIsExplaination(false)
-				
-				setAnswerAction(false)
-				setIsHint(false)
-				if(quizType === "easytohard"){
-					setCheck_Answer("")
-					console.log(questionNumber + 1 , allQuestion.Questions.length,questionNumber + 1 > allQuestion.Questions.length)
-					if(questionNumber + 1 >= allQuestion.Questions.length){
+	
+			var {quizType,allQuestion } = props.dataprops.questionData;
+			saveLogForUser();
+			setIsExplaination(false)
+			setAnswerAction(false)
+			setIsHint(false)
+			
+			if(quizType === "easytohard"){
+				setCheck_Answer("")
+				if(questionNumber + 1 >= allQuestion.Questions.length){
+					setQuestionNumber(0)
+					getQuestionData(datasetNumber+1);
+					setDatasetNumber(datasetNumber+1)
+				}else{
+					props.dataprops.setOneQuestion(allQuestion.Questions[questionNumber+1])
+					setQuestionNumber(questionNumber+1)
+				}
+			}else if(quizType === "hardtoeasy"){
+				if(check_Answer){
+					setDatasetNumber(datasetNumber+1)
+					getQuestionData(datasetNumber+1);
+				}else{
+					if(questionNumber + 1 >= props.dataprops.questionData.allQuestion.Questions.length){
 						setQuestionNumber(0)
-						setDatasetNumber(datasetNumber+1)
 						getQuestionData(datasetNumber+1);
-					}else{
-						props.dataprops.setOneQuestion(allQuestion.Questions[questionNumber+1])
-						setQuestionNumber(questionNumber+1)
-					}
-				}else if(quizType === "hardtoeasy"){
-					if(check_Answer){
 						setDatasetNumber(datasetNumber+1)
-						getQuestionData(datasetNumber+1);
 					}else{
-						if(questionNumber + 1 >= props.dataprops.questionData.allQuestion.Questions.length){
-							setQuestionNumber(0)
-							setDatasetNumber(datasetNumber+1)
-							getQuestionData(datasetNumber+1);
-						}else{
-							setDatasetNumber(datasetNumber+1)
-							setQuestionNumber(questionNumber + 1)
-							props.dataprops.setOneQuestion(allQuestion.Questions[questionNumber])
-						}
-						
-						
+						setQuestionNumber(questionNumber + 1)
+						props.dataprops.setOneQuestion(allQuestion.Questions[questionNumber])
+
 					}
-					
 				}
 			}
+		}
 	}
-
+	
 	const startStudySession = async () => {
 		try {
 			setStartloader(true)
@@ -284,7 +334,7 @@ const Dashboard = (props) => {
 										    </div>
 										    <div className="cut-box">
 											    <label htmlFor="lname">Answer</label>
-											    <input className="text-box-cust" onChange={(e) => setUserAnswer(e.target.value)} type="text" id="answer" name="lastname" placeholder="Your answer" value={userAnswer} />
+											    <input className="text-box-cust" onChange={(e) => changeanswer(e.target.value) } value={userAnswer} type="text" id="answer" name="lastname" placeholder="Your answer"/>
 											    {isHint && <><label htmlFor="fname">Hint :-  </label><span >{props.dataprops.questionData.oneQuestion.Hint}</span ></> }
 											    
 											    <br/>
@@ -377,8 +427,10 @@ const Dashboard = (props) => {
 									}
 								</form>
 							{/* )} */}
+
 						</div>
             		</div>
+            		
             	</div>
             <Footer/>
         </>
