@@ -32,6 +32,16 @@ const ApiServiceCall = {
         .catch(function (response) {
            return response;
         });
+    },
+    getAllEasyQuestion : async function(value){
+        //set token in header option
+        setAuthToken(); 
+        return await axios.get(api_url + "getAllEasyQuestion").then(function (response) {
+            return response
+        })
+        .catch(function (response) {
+           return response;
+        });
     }
 }
 

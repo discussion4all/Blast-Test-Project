@@ -4,6 +4,7 @@ import Header from "../common/header";
 import PreLoading from "../common/preloading";
 import ApiServiceCall from "../../services/api";
 import {  useHistory } from "react-router-dom";
+
 const Dashboard = (props) => {
 	console.log("props",props)
 	const History =  useHistory();
@@ -19,9 +20,11 @@ const Dashboard = (props) => {
 	const [showQuestion,setShowQuestion]  = useState(false);
 	const [userAnswer,setUserAnswer] = useState("");
 	const [check_Answer,setCheck_Answer]= useState("");
+
 	useEffect(() => {
 	   getQuestionData(datasetNumber);
 	}, []);
+
 	const getQuestionData = async (dataset)=>{
 		var value = {"set":dataset};
 		setStartloader(true)
@@ -97,6 +100,45 @@ const Dashboard = (props) => {
 			}
 		}
 	}
+
+	const startStudySession = async () => {
+		
+		setStartloader(true)
+		var getdata = await ApiServiceCall.getAllEasyQuestion();
+		let questionsArray = [];
+		if(getdata.data.err === null){
+			if(getdata.data.data.length > 0){
+				getdata.data.data.forEach(questions => {
+					questionsArray = questionsArray.concat(questions.Questions);
+				});
+				props.dataprops.setAllQuestion(questionsArray);
+				console.log("questionsArray", questionsArray);
+				getRandomQuestion(questionsArray);
+				
+				setStartloader(false);
+			}else{
+				History.push("/audio");
+			}
+		}else{
+			console.log("Somthing wrong")
+		}
+	}
+	
+
+	const getRandomQuestion = (allQuestion) => {
+		
+		// var {allQuestion } = props.dataprops.questionData;
+		if (allQuestion.length > 0) {
+            var optionsE = Math.floor(Math.random() * allQuestion.length);
+	 		props.dataprops.setOneQuestion(allQuestion[optionsE]);
+			
+			console.log("Item---  ",allQuestion[optionsE]);
+            var removedE = allQuestion.splice(optionsE, 1);
+            
+        } else {
+            alert("the array is now empty");
+        }
+	}
 	
     return(
         <>
@@ -105,9 +147,11 @@ const Dashboard = (props) => {
             	<div className="container">
             		<div className="_vertical-center">
             			<div className="main-div">
+						<button onClick={()=>startStudySession()}>Study Session</button>
             				{props.dataprops.questionData.allQuestion.length !== 0 && (
 								<form >
 									{ !showQuestion && (
+										<>
 									  	<div className="more-select" onChange={(e)=>changeExamType(e)}>
 							            	<div className="input-box-web">
 							            		<input type="radio" value="easytohard" name="examtype" /> <span >Easy to Hard</span >
@@ -115,7 +159,10 @@ const Dashboard = (props) => {
 								            <div className="input-box-web">
 								              <input type="radio" value="hardtoeasy" name="examtype"/><span >Hard to Easy</span >
 									        </div>
-						            	</div>)
+										</div>
+										
+										</>
+										)
 						            }
 					            	{showQuestion &&(
 						            	<>
