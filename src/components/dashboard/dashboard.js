@@ -37,6 +37,7 @@ const Dashboard = (props) => {
 
 	useEffect(() => {
 	   getQuestionData(datasetNumber);
+	   setShowOptions(true);
 	}, []);
 
 	const getQuestionData = async (dataset)=>{
@@ -48,7 +49,7 @@ const Dashboard = (props) => {
 				props.dataprops.setAllQuestion(getdata.data.data[0])
 				setQuestion(getdata.data.data[0].Questions,props.dataprops.questionData.quizType)
 				setStartloader(false);
-				setShowOptions(true);
+		
 			}else{
 				History.push("/answer");
 			}
@@ -82,7 +83,6 @@ const Dashboard = (props) => {
 			setAnswerResult(true);
 			if(sessionPass !== undefined){
 				if(practicePass === "easy"){
-					console.log("correct anser practice---",correctPracticeAnswer);	
 					setCorrectPracticeAnswer({...correctPracticeAnswer,easyCorrect:correctPracticeAnswer.easyCorrect+1});
 				}else{
 					setCorrectPracticeAnswer({...correctPracticeAnswer,hardCorrect:correctPracticeAnswer.hardCorrect+1});
@@ -221,7 +221,7 @@ const Dashboard = (props) => {
 						}
 						setCorrectPracticeAnswer(obj);
 					}else{
-						History.push("/audio");
+						History.push("/");
 					}
 				}else{
 					console.log("Somthing wrong")
@@ -237,7 +237,7 @@ const Dashboard = (props) => {
 	const getRandomQuestion = (questions) => {
 		
 		let allQuestion = [];
-		console.log("question---",questions);
+		
 		if(questions === undefined || questions === null){
 			allQuestion = props.dataprops.questionData.allQuestion;
 			console.log(props.dataprops.questionData.allQuestion,allQuestion);
@@ -263,7 +263,7 @@ const Dashboard = (props) => {
 					stopAudio();
 				}, 30000);
 			}else{
-				console.log("Result------------",correctPracticeAnswer);
+				
 				setShowQuestion(false);
 				setShowPracticeResult(true);
 			}
@@ -314,7 +314,7 @@ const Dashboard = (props) => {
             		<div className="_vertical-center">
             			<div className="main-div">
 						
-            				{/* {props.dataprops.questionData.allQuestion.length !== 0 && ( */}
+            				{props.dataprops.questionData.length !== 0 && (
 								<form >
 									{ showOptions && (
 										<>
@@ -398,7 +398,7 @@ const Dashboard = (props) => {
 												src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
 												ref={player}
 												/>
-												
+												<center>
 												<CountdownCircleTimer
 													isPlaying
 													duration={30}
@@ -410,7 +410,7 @@ const Dashboard = (props) => {
 												>
 													{({ remainingTime }) => remainingTime}
 												</CountdownCircleTimer>
-											
+												</center>
 											</div>
 										)
 									}
@@ -431,7 +431,7 @@ const Dashboard = (props) => {
 										)
 									}
 								</form>
-							{/* )} */}
+							 )} 
 
 						</div>
             		</div>
