@@ -3,15 +3,12 @@ import Footer from "../common/footer";
 import Header from "../common/header";
 import PreLoading from "../common/preloading";
 import ApiServiceCall from "../../services/api";
-import {  useHistory } from "react-router-dom";
-
-import { CountdownCircleTimer } from "react-countdown-circle-timer";
-import AudioPlayer from 'react-h5-audio-player';
-import 'react-h5-audio-player/lib/styles.css';
+import {  useHistory, useParams } from "react-router-dom";
 
 import Answerdisplay from "./answerdisplay"
+import AudioDisplay from "./audio";
 
-const Dashboard = (props) => {
+const Question = (props) => {
 	const History =  useHistory();
 	if (props.dataprops.user.token === null || props.dataprops.user.token === "") {
 	    History.push("/");
@@ -32,12 +29,22 @@ const Dashboard = (props) => {
 	const [showAudio,setShowAudio] = useState(false);
 	const [showPracticeResult,setShowPracticeResult] = useState(false);
 	const [showOptions,setShowOptions] = useState(false);
+	const [lblheading,setLblheading] = useState("");
 
 	const player = useRef();
 
+	var {session} = useParams();
+    
 	useEffect(() => {
-	   getQuestionData(datasetNumber);
-	   setShowOptions(true);
+		if(session === "quizSession"){
+	    	getQuestionData(datasetNumber);
+			setShowOptions(true);
+			setLblheading("Quiz Session");
+	    }else{
+			startStudySession();
+	    	setShowOptions(false);
+			setLblheading("Study Session");
+		}
 	}, []);
 
 	const getQuestionData = async (dataset)=>{
@@ -309,16 +316,18 @@ const Dashboard = (props) => {
     return(
         <>
         	{startloader && <PreLoading/>}
-            <Header/>
+            <Header showMenu={false} />
             	<div className="container">
             		<div className="_vertical-center">
             			<div className="main-div">
-						
+
             				{props.dataprops.questionData.length !== 0 && (
+								<>
+								<h1>{lblheading}</h1>
 								<form >
 									{ showOptions && (
 										<>
-										<input type="button" className="submit-btn" onClick={()=>startStudySession()} value="Study Session"/>
+										{/* <input type="button" className="submit-btn" onClick={()=>startStudySession()} value="Study Session"/> */}
 									  	<div className="more-select" onChange={(e)=>changeExamType(e)}>
 							            	<div className="input-box-web">
 							            		<input type="radio" value="easytohard" name="examtype" /> <span >Easy to Hard</span >
@@ -391,27 +400,7 @@ const Dashboard = (props) => {
 						            }
 									{
 										showAudio &&(
-											<div className="container">
-												<h4>Please listen to this music while you take a mental break.</h4>
-												<AudioPlayer
-												autoPlay
-												src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
-												ref={player}
-												/>
-												<center>
-												<CountdownCircleTimer
-													isPlaying
-													duration={30}
-													colors={[
-													['#004777', 0.33],
-													['#F7B801', 0.33],
-													['#A30000', 0.33],
-													]}
-												>
-													{({ remainingTime }) => remainingTime}
-												</CountdownCircleTimer>
-												</center>
-											</div>
+											<AudioDisplay playerRef={player} />
 										)
 									}
 									
@@ -431,6 +420,7 @@ const Dashboard = (props) => {
 										)
 									}
 								</form>
+								</>
 							 )} 
 
 						</div>
@@ -442,4 +432,4 @@ const Dashboard = (props) => {
     )
 }
 
-export default Dashboard;
+export default Question;

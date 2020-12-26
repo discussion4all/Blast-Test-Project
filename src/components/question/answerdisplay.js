@@ -7,7 +7,7 @@ const Answerdisplay = (props) => {
 	
 	const History =  useHistory();
 	if(props.dataprops.questionData.answers.length <= 0){
-		History.push("/dashboard");
+		History.push("/question/quizSession");
 	}else if (props.dataprops.user.token === null || props.dataprops.user.token === "") {
 	    History.push("/");
 	}

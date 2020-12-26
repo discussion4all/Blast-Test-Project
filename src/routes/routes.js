@@ -1,19 +1,19 @@
-import login from '../components/login/login';
-import dashboard from '../components/dashboard/dashboard';
-import Answerdisplay from '../components/dashboard/answerdisplay';
+import home from '../components/home/home';
+import question from '../components/question/question';
+import answerdisplay from '../components/question/answerdisplay';
 
 const routes = [
     {
         path : "/",
-        Component : login
+        Component : home
     },
     {
-        path : "/dashboard",
-        Component : dashboard
+        path : "/question/:session",
+        Component : question
     },
     {
         path : "/answer",
-        Component : Answerdisplay
+        Component : answerdisplay
     }
 ];
 

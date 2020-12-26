@@ -1,18 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Footer from "../common/footer";
 import Header from "../common/header";
 import ApiServiceCall from "../../services/api";
 import {  useHistory } from "react-router-dom";
 
-const Login = (props) => {
+const Home = (props) => {
 	const History =  useHistory();
-	const onSubmit = async () => {
+	useEffect(() => {
+		getToken();
+	 }, []);
+
+	const getToken = async () => {
 		try {
 			var result = await ApiServiceCall.login({});
 			if(result.data.err === null){
 				window.localStorage.setItem("token", result.data.data);
 				props.dataprops.setToken(result.data.data)
-				History.push('/dashboard')
+				
 			}else{
 				alert("Something wrong!")
 			}
@@ -22,10 +26,10 @@ const Login = (props) => {
 	}
     return(
         <>
-            <Header/>
+            <Header showMenu={true}/>
             	<div className="container">
             		<div className="vertical-center">
-            			<button className="button" onClick={onSubmit}>Start Exam</button>
+						<h1>Welcome to quiz portal</h1>
             		</div>
             	</div>
             <Footer/>
@@ -33,4 +37,4 @@ const Login = (props) => {
     )
 }
 
-export default Login;
+export default Home;
