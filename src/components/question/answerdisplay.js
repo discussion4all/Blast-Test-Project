@@ -3,6 +3,7 @@ import Footer from "../common/footer";
 import Header from "../common/header";
 import {  useHistory } from "react-router-dom";
 
+//display answer components
 const Answerdisplay = (props) => {
 	
 	const History =  useHistory();
@@ -13,7 +14,7 @@ const Answerdisplay = (props) => {
 	}
 	useEffect(() => {
 	}, []);
-	//var {answers } =props.dataprops.questionData
+	
 	return (<div>
 			<Header/>
             	<div className="container">

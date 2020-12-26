@@ -1,6 +1,9 @@
+
 import { Link, useHistory } from "react-router-dom";
 
+//common header for appliction
 const Header = ({showMenu}) => {
+
     return(
         <div  className="nax-bar-main ">
             <p>Quiz Portal</p>

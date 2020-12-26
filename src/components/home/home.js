@@ -4,12 +4,24 @@ import Header from "../common/header";
 import ApiServiceCall from "../../services/api";
 import {  useHistory } from "react-router-dom";
 
+//Home components
 const Home = (props) => {
+
 	const History =  useHistory();
 	useEffect(() => {
+		console.log("props--",props);
+		var obj = {
+			allQuestion : [],
+			oneQuestion : {},
+			quizType : "",
+			answers : []
+		}
+		props.dataprops.setInitialState(obj);
+		console.log("props--",props);
 		getToken();
 	 }, []);
 
+	 //get token when page load
 	const getToken = async () => {
 		try {
 			var result = await ApiServiceCall.login({});

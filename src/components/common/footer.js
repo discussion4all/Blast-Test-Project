@@ -1,3 +1,4 @@
+//common footer for appliction
 const Footer = () => {
     return(
         <div className="bottom-box-1">

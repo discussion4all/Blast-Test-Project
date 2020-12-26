@@ -18,12 +18,14 @@ const AudioDisplay = ({playerRef}) => {
 	return (
         <div className="container">
             <h4>Please listen to this music while you take a mental break.</h4>
+            {/* Display Audio */}
             <AudioPlayer
                 autoPlay
                 src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
                 ref={playerRef}
                 />
             <center>
+                {/* Count down timer for 30 sec */}
                 <CountdownCircleTimer
                     isPlaying
                     duration={30}
@@ -33,7 +35,13 @@ const AudioDisplay = ({playerRef}) => {
                     ['#A30000', 0.33],
                     ]}
                 >
-                    {({ remainingTime }) => remainingTime}
+                    
+                    {({ remainingTime }) => 
+                        <div className="time-wrapper">
+                            <div className="time">{remainingTime}</div>
+                            <div>seconds</div>
+                        </div>
+                    }
                 </CountdownCircleTimer>
             </center>
         </div>

@@ -36,6 +36,7 @@ const Question = (props) => {
 	var {session} = useParams();
     
 	useEffect(() => {
+		//check session type
 		if(session === "quizSession"){
 	    	getQuestionData(datasetNumber);
 			setShowOptions(true);
@@ -47,6 +48,7 @@ const Question = (props) => {
 		}
 	}, []);
 
+	//get set wise data.
 	const getQuestionData = async (dataset)=>{
 		var value = {"set":dataset};
 		setStartloader(true)
@@ -64,6 +66,8 @@ const Question = (props) => {
 			console.log("Somthing wrong")
 		}
 	}
+
+	//set question
 	const setQuestion = async (qdataset,type)=>{
 		if(type === "hardtoeasy"){
 			const b = qdataset.find((item) => item.Type === 'Hard')
@@ -76,12 +80,16 @@ const Question = (props) => {
 			}
 		}
 	}
+
+	//set exam type which is selected by user
 	const changeExamType = async(e)=>{
 		props.dataprops.setquizType(e.target.value)
 		setQuestion(props.dataprops.questionData.allQuestion.Questions,e.target.value);
 		setShowQuestion(true)
 		setShowOptions(false);
 	}
+
+	//check answer correct or not
 	const checkAnswer = async(sessionPass)=>{
 		setAnswerAction(true);
 		setUserAnswer("");
@@ -89,7 +97,9 @@ const Question = (props) => {
 			setCheck_Answer(true)
 			setAnswerResult(true);
 			if(sessionPass !== undefined){
+				//if answer correct check which practice pass
 				if(practicePass === "easy"){
+					//increment count
 					setCorrectPracticeAnswer({...correctPracticeAnswer,easyCorrect:correctPracticeAnswer.easyCorrect+1});
 				}else{
 					setCorrectPracticeAnswer({...correctPracticeAnswer,hardCorrect:correctPracticeAnswer.hardCorrect+1});
@@ -99,7 +109,9 @@ const Question = (props) => {
 			setCheck_Answer(false)
 			setAnswerResult(false);
 			if(sessionPass !== undefined){
+				//if answer incorrect check which practice pass
 				if(practicePass === "easy"){
+					//increment count
 					setCorrectPracticeAnswer({...correctPracticeAnswer,easyIncorrect:correctPracticeAnswer.easyIncorrect+1});
 				}else{
 					setCorrectPracticeAnswer({...correctPracticeAnswer,hardIncorrect:correctPracticeAnswer.hardIncorrect+1});
@@ -113,6 +125,8 @@ const Question = (props) => {
 	const changeanswer = (answer)=>{
 		setUserAnswer(answer);
 	}
+
+	//if user's answer correct, save it in db(only in exam session).
 	const saveLogForUser = async()=>{
 	var {oneQuestion }=props.dataprops.questionData;
 		var reqObject = {
@@ -126,6 +140,7 @@ const Question = (props) => {
 		}
 		ApiServiceCall.saveLogForUser(reqObject)
 	}
+
 	const setAnswerResult = async(answerstatus)=>{
 		var {answers,quizType}= props.dataprops.questionData;
 
@@ -157,6 +172,8 @@ const Question = (props) => {
 			}
 		}
 	}
+
+	//set next question
 	const next_Question = async(sessionType)=>{
 	
 		if(sessionType !== undefined && sessionType === "practiceSession"){
@@ -203,6 +220,7 @@ const Question = (props) => {
 		}
 	}
 	
+	// start study session and display random question
 	const startStudySession = async () => {
 		try {
 			setStartloader(true)
@@ -240,7 +258,7 @@ const Question = (props) => {
 		
 	}
 	
-
+	//get random question
 	const getRandomQuestion = (questions) => {
 		
 		let allQuestion = [];
@@ -263,6 +281,7 @@ const Question = (props) => {
 			setShowOptions(false);
         } else {
 			console.log("yes empty");
+			// if all easy questions completetd.
 			if(practicePass === "easy"){
 				setShowAudio(true);
 				setShowQuestion(false);
@@ -270,13 +289,14 @@ const Question = (props) => {
 					stopAudio();
 				}, 30000);
 			}else{
-				
+				//if all hard question done , show result
 				setShowQuestion(false);
 				setShowPracticeResult(true);
 			}
         }
 	}
 
+	//after 30 sec stop audio
 	const stopAudio = async () => {
 		
 		try {
@@ -309,6 +329,7 @@ const Question = (props) => {
 		
 	}
 	
+	//close study session.
 	const closeSession = () => {
 		History.push("/");
 	}
@@ -319,15 +340,15 @@ const Question = (props) => {
             <Header showMenu={false} />
             	<div className="container">
             		<div className="_vertical-center">
+						<div className="main-div">
+								<h1 className="heading">{lblheading}</h1>
+						</div>
             			<div className="main-div">
 
             				{props.dataprops.questionData.length !== 0 && (
-								<>
-								<h1>{lblheading}</h1>
 								<form >
 									{ showOptions && (
 										<>
-										{/* <input type="button" className="submit-btn" onClick={()=>startStudySession()} value="Study Session"/> */}
 									  	<div className="more-select" onChange={(e)=>changeExamType(e)}>
 							            	<div className="input-box-web">
 							            		<input type="radio" value="easytohard" name="examtype" /> <span >Easy to Hard</span >
@@ -420,7 +441,6 @@ const Question = (props) => {
 										)
 									}
 								</form>
-								</>
 							 )} 
 
 						</div>

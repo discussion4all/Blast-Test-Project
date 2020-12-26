@@ -2,10 +2,10 @@ import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import routes from "./routes/routes";
 import {connect,Provider} from 'react-redux'
-import './App.css';
+import './app.css';
 import "./style/css/style.css";
-import {setToken,setName} from './Actions/UserAction'
-import {setAllQuestion,setOneQuestion,setquizType,setAllAnswers} from './Actions/QuestionAction'
+import {setToken,setName} from './actions/userAction'
+import {setInitialState,setAllQuestion,setOneQuestion,setquizType,setAllAnswers} from './actions/questionAction'
 
 
 function App(props) {
@@ -31,6 +31,7 @@ function App(props) {
   );
 }
 
+//state for the appliction
 const mapStateToProps = (state) =>{
   return {
     user : state.user,
@@ -38,8 +39,12 @@ const mapStateToProps = (state) =>{
   }
 }
 
+//dispatch all method for application
 const mapDispatchToProps = (dispatch) =>{
   return {
+    setInitialState:(initialState) =>{
+      dispatch(setInitialState(initialState))
+    },
     setToken: (token) =>{
       dispatch(setToken(token))
     },setName:(name)=>{

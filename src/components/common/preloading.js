@@ -1,3 +1,4 @@
+//common lodear  for appliction
 const PreLoading = () => {
     return(
         <div className="loader-container">

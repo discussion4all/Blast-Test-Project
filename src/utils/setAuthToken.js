@@ -1,5 +1,5 @@
 import axios from "axios";
-
+//set token in header
 const setAuthToken = () => {
   const token = window.localStorage.getItem("token");
   console.log("Token get", token);

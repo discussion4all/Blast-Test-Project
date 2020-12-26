@@ -1,3 +1,5 @@
+//question, answer action reducer for action
+
 const questionReducer = (state = {
 	allQuestion : [],
 	oneQuestion : {},
@@ -6,6 +8,9 @@ const questionReducer = (state = {
 },action) =>{
 
 	switch(action.type){
+		case "SET_INITIAL_STATE":
+			state=action.payload
+			break;
 		case "SET_ALL_QUESTION":
 			state={
 				...state,
