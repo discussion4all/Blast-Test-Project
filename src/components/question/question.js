@@ -92,7 +92,7 @@ const Question = (props) => {
 	//check answer correct or not
 	const checkAnswer = async(sessionPass)=>{
 		setAnswerAction(true);
-		setUserAnswer("");
+		// setUserAnswer("");
 		if(props.dataprops.questionData.oneQuestion.Answer.replace(/\s+/g,' ').trim().toLowerCase() === userAnswer.replace(/\s+/g,' ').trim().toLowerCase()){
 			setCheck_Answer(true)
 			setAnswerResult(true);
@@ -190,7 +190,7 @@ const Question = (props) => {
 			setIsExplaination(false)
 			setAnswerAction(false)
 			setIsHint(false)
-			
+			setUserAnswer("");
 			if(quizType === "easytohard"){
 				setCheck_Answer("")
 				if(questionNumber + 1 >= allQuestion.Questions.length){
