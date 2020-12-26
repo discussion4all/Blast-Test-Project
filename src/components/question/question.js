@@ -203,8 +203,17 @@ const Question = (props) => {
 				}
 			}else if(quizType === "hardtoeasy"){
 				if(check_Answer){
-					setDatasetNumber(datasetNumber+1)
-					getQuestionData(datasetNumber+1);
+					if(props.dataprops.questionData.oneQuestion.Type === "Hard"){
+						setDatasetNumber(datasetNumber+1)
+						getQuestionData(datasetNumber+1);
+					}else if(questionNumber + 1 >= props.dataprops.questionData.allQuestion.Questions.length){
+						setQuestionNumber(0)
+						setDatasetNumber(datasetNumber+1)
+						getQuestionData(datasetNumber+1);
+					}else{
+						setQuestionNumber(questionNumber + 1)
+						props.dataprops.setOneQuestion(allQuestion.Questions[questionNumber])
+					}
 				}else{
 					if(questionNumber + 1 >= props.dataprops.questionData.allQuestion.Questions.length){
 						setQuestionNumber(0)
