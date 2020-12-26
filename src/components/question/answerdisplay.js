@@ -20,15 +20,15 @@ const Answerdisplay = (props) => {
             	<div className="container">
             		<div className="_vertical-center">
             			<div className="main-div">
+							<h2 className="heading">{props.dataprops.questionData.quizType} Method</h2>
             				<h4>Answer</h4>
             				{ 
             					props.dataprops.questionData.answers.map((ansData,index)=>{
             						return (
             						<div key={index}>
             							<h5>QuestionSet :- {ansData.QuestionSet}</h5>
-            							<h6>Type :-{ansData.QuestionSet}</h6>
             							{ansData.answers.map((oneans,index)=>{
-            								return (<><label htmlFor="lname">Answer {oneans.questionNumber} : </label><span>{oneans.answer ? "Correct" : "Incorrect"}</span><br/></>)
+            								return (<><label htmlFor="lname">Answer {oneans.questionNumber + 1} : </label><span>{oneans.answer ? "Correct" : "Incorrect"}</span><br/></>)
             							})}
             						</div>
             						)
