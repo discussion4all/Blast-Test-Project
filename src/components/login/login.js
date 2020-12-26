@@ -3,9 +3,10 @@ import Footer from "../common/footer";
 import Header from "../common/header";
 import ApiServiceCall from "../../services/api";
 import {  useHistory } from "react-router-dom";
-
+//login components
 const Login = (props) => {
 	const History =  useHistory();
+	//submit when user click button
 	const onSubmit = async () => {
 		try {
 			var result = await ApiServiceCall.login({});

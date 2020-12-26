@@ -1,3 +1,4 @@
+//common header for appliction
 const Header = () => {
     return(
         <div  className="nax-bar-main ">

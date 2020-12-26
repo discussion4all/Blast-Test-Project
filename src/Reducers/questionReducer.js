@@ -1,3 +1,5 @@
+//question, answer action reducer for action
+
 const questionReducer = (state = {
 	allQuestion : [],
 	oneQuestion : {},

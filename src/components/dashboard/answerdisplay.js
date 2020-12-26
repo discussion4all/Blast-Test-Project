@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Footer from "../common/footer";
 import Header from "../common/header";
 import {  useHistory } from "react-router-dom";
-
+//display answer components
 const Answerdisplay = (props) => {
 	
 	const History =  useHistory();
