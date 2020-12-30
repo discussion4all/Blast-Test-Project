@@ -30,6 +30,7 @@ const Question = (props) => {
 	const [showPracticeResult,setShowPracticeResult] = useState(false);
 	const [showOptions,setShowOptions] = useState(false);
 	const [lblheading,setLblheading] = useState("");
+	const [message,setMessage] = useState("");
 
 	const player = useRef();
 
@@ -53,18 +54,26 @@ const Question = (props) => {
 		var value = {"set":dataset};
 		setStartloader(true)
 		var getdata = await ApiServiceCall.getOneQuestionSet(value);
-		if(getdata.data.err === null){
-			if(getdata.data.data.length > 0){
-				props.dataprops.setAllQuestion(getdata.data.data[0])
-				setQuestion(getdata.data.data[0].Questions,props.dataprops.questionData.quizType)
-				setStartloader(false);
 		
+			if(getdata.data.err === null){
+				if(getdata.data.data != null){
+					console.log("data--",getdata.data);
+					if(getdata.data.data.length > 0){
+						props.dataprops.setAllQuestion(getdata.data.data[0])
+						setQuestion(getdata.data.data[0].Questions,props.dataprops.questionData.quizType)
+						setStartloader(false);
+				
+					}else{
+						History.push("/answer");
+					}
+				}else{
+					setStartloader(false);
+					setShowOptions(false);
+					setMessage("Questions Not available.");
+				}
 			}else{
-				History.push("/answer");
+				console.log("Somthing wrong")
 			}
-		}else{
-			console.log("Somthing wrong")
-		}
 	}
 
 	//set question
@@ -356,6 +365,9 @@ const Question = (props) => {
 
             				{props.dataprops.questionData.length !== 0 && (
 								<form >
+									{
+										message != "" ? (<h3 className="heading">{message}</h3>) : ""
+									}
 									{ showOptions && (
 										<>
 									  	<div className="more-select" onChange={(e)=>changeExamType(e)}>
