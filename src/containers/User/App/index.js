@@ -9,8 +9,8 @@ import AppLocale from "lngProvider";
 import MainApp from "./MainApp";
 import SignIn from "../SignIn";
 import SignUp from "../SignUp";
-import {setInitUrl} from "appRedux/actions/Auth";
-import {onLayoutTypeChange, onNavStyleChange, setThemeType} from "appRedux/actions/Setting";
+import {setInitUrl} from "../../../appRedux/actions/Auth";
+import {onLayoutTypeChange, onNavStyleChange, setThemeType} from "../../../appRedux/actions/Setting";
 
 import {
   LAYOUT_TYPE_BOXED,
@@ -21,7 +21,7 @@ import {
   NAV_STYLE_DARK_HORIZONTAL,
   NAV_STYLE_DEFAULT_HORIZONTAL,
   NAV_STYLE_INSIDE_HEADER_HORIZONTAL
-} from "../../constants/ThemeSetting";
+} from "../../../constants/ThemeSetting";
 
 const RestrictedRoute = ({component: Component, location, token, ...rest}) =>
   <Route
@@ -31,7 +31,7 @@ const RestrictedRoute = ({component: Component, location, token, ...rest}) =>
         ? <Component {...props} />
         : <Redirect
           to={{
-            pathname: '/admin/signin',
+            pathname: '/signin',
             state: {from: location}
           }}
         />}
@@ -109,16 +109,14 @@ const App = () => {
 
   useEffect(() => {
     if (location.pathname === '/') {
-      console.log("initURL",initURL);
-      if (token === null) {
-        history.push('/admin/signin');
-      } else if (initURL === '' || initURL === '/' || initURL === '/admin/signin' || token !== null) {
-        console.log("in app index.js redirect to dash borad");
-        history.push('/admin/dashboard');
+       history.push('/startexam');
+      /*if (token === null) {
+        history.push('/signin');
+      } else if (initURL === '' || initURL === '/' || initURL === '/signin') {
+        history.push('/sample');
       } else {
-        console.log("in app index.js redirect same page");
         history.push(initURL);
-      }
+      }*/
     }
   }, [token, initURL, location, history]);
 
@@ -131,8 +129,8 @@ const App = () => {
         messages={currentAppLocale.messages}>
 
         <Switch>
-          <Route exact path='/admin/signin' component={SignIn}/>
-          <Route exact path='/admin/signup' component={SignUp}/>
+          <Route exact path='/signin' component={SignIn}/>
+          <Route exact path='/signup' component={SignUp}/>
           <RestrictedRoute path={`${match.url}`} token={token} location={location}
                            component={MainApp}/>
         </Switch>

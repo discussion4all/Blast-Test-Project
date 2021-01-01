@@ -1,14 +1,17 @@
 import React, {useEffect} from "react";
 import {Button, Checkbox, Form, Input} from "antd";
-import {useDispatch, useSelector} from "react-redux";
 import {Link} from "react-router-dom";
 
-import {userSignIn} from "../appRedux/actions/Auth";
+import {useDispatch, useSelector} from "react-redux";
+import {userSignUp} from "../../appRedux/actions/Auth";
+
 import IntlMessages from "util/IntlMessages";
 import InfoView from "components/InfoView";
 
+const FormItem = Form.Item;
 
-const SignIn = (props) => {
+const SignUp = (props) => {
+
   const dispatch = useDispatch();
   const token = useSelector(({auth}) => auth.token);
 
@@ -17,17 +20,14 @@ const SignIn = (props) => {
   };
 
   const onFinish = values => {
-    console.log("finish",values)
-    dispatch(userSignIn(values));
+    dispatch(userSignUp(values));
   };
 
   useEffect(() => {
-    console.log("token",token);
     if (token !== null) {
-      console.log("toke available");
       props.history.push('/');
     }
-  }, [token, props.history]);
+  });
 
   return (
     <div className="gx-app-login-wrap">
@@ -35,10 +35,10 @@ const SignIn = (props) => {
         <div className="gx-app-login-main-content">
           <div className="gx-app-logo-content">
             <div className="gx-app-logo-content-bg">
-              <img src="https://via.placeholder.com/272x395" alt='Neature'/>
+              <img src='https://via.placeholder.com/272x395' alt='Neature'/>
             </div>
             <div className="gx-app-logo-wid">
-              <h1><IntlMessages id="app.userAuth.signIn"/></h1>
+              <h1><IntlMessages id="app.userAuth.signUp"/></h1>
               <p><IntlMessages id="app.userAuth.bySigning"/></p>
               <p><IntlMessages id="app.userAuth.getAccount"/></p>
             </div>
@@ -46,6 +46,7 @@ const SignIn = (props) => {
               <img alt="example" src={require("assets/images/logo.png")}/>
             </div>
           </div>
+
           <div className="gx-app-login-content">
             <Form
               initialValues={{ remember: true }}
@@ -53,24 +54,30 @@ const SignIn = (props) => {
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
               className="gx-signin-form gx-form-row0">
+              <FormItem rules={[{required: true, message: 'Please input your username!'}]} name="Username">
+                <Input placeholder="Username"/>
+              </FormItem>
 
-              <Form.Item
-                initialValue=""
-                rules={[{ required: true, message: 'The input is not valid E-mail!' }]} name="email">
+              <FormItem name="email" rules={[{
+                required: true, type: 'email', message: 'The input is not valid E-mail!',
+              }]}>
                 <Input placeholder="Email"/>
-              </Form.Item>
-              <Form.Item
-                initialValue=""
-                rules= {[{required: true, message: 'Please input your Password!'}]}  name="password">
+              </FormItem>
+              <FormItem name="password"
+                        rules={[{required: true, message: 'Please input your Password!'}]}>
                 <Input type="password" placeholder="Password"/>
-              </Form.Item>
-              <Form.Item>
+              </FormItem>
+              <FormItem  name="remember" valuePropName="checked">
+                <Checkbox>Remember me</Checkbox>
+                <Link className="gx-login-form-forgot" to="/custom-views/user-auth/forgot-password">Forgot password</Link>
+              </FormItem>
+              <FormItem>
                 <Button type="primary" className="gx-mb-0" htmlType="submit">
-                  <IntlMessages id="app.userAuth.signIn"/>
+                  <IntlMessages id="app.userAuth.signUp"/>
                 </Button>
-                {/* <span><IntlMessages id="app.userAuth.or"/></span> <Link to="/admin/signup"><IntlMessages
-                id="app.userAuth.signUp"/></Link> */}
-              </Form.Item>
+                <span><IntlMessages id="app.userAuth.or"/></span> <Link to="/signin"><IntlMessages
+                id="app.userAuth.signIn"/></Link>
+              </FormItem>
             </Form>
           </div>
           <InfoView/>
@@ -80,4 +87,4 @@ const SignIn = (props) => {
   );
 };
 
-export default SignIn;
+export default SignUp;

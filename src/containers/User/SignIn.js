@@ -3,7 +3,7 @@ import {Button, Checkbox, Form, Input} from "antd";
 import {useDispatch, useSelector} from "react-redux";
 import {Link} from "react-router-dom";
 
-import {userSignIn} from "../appRedux/actions/Auth";
+import {userSignIn} from "../../appRedux/actions/Auth";
 import IntlMessages from "util/IntlMessages";
 import InfoView from "components/InfoView";
 
@@ -22,9 +22,7 @@ const SignIn = (props) => {
   };
 
   useEffect(() => {
-    console.log("token",token);
     if (token !== null) {
-      console.log("toke available");
       props.history.push('/');
     }
   }, [token, props.history]);
@@ -55,22 +53,29 @@ const SignIn = (props) => {
               className="gx-signin-form gx-form-row0">
 
               <Form.Item
-                initialValue=""
+                initialValue="demo@example.com"
                 rules={[{ required: true, message: 'The input is not valid E-mail!' }]} name="email">
                 <Input placeholder="Email"/>
               </Form.Item>
               <Form.Item
-                initialValue=""
+                initialValue="demo#123"
                 rules= {[{required: true, message: 'Please input your Password!'}]}  name="password">
                 <Input type="password" placeholder="Password"/>
+              </Form.Item>
+              <Form.Item>
+                <Checkbox><IntlMessages id="appModule.iAccept"/></Checkbox>
+                <span className="gx-signup-form-forgot gx-link"><IntlMessages
+                  id="appModule.termAndCondition"/></span>
               </Form.Item>
               <Form.Item>
                 <Button type="primary" className="gx-mb-0" htmlType="submit">
                   <IntlMessages id="app.userAuth.signIn"/>
                 </Button>
-                {/* <span><IntlMessages id="app.userAuth.or"/></span> <Link to="/admin/signup"><IntlMessages
-                id="app.userAuth.signUp"/></Link> */}
+                <span><IntlMessages id="app.userAuth.or"/></span> <Link to="/signup"><IntlMessages
+                id="app.userAuth.signUp"/></Link>
               </Form.Item>
+              <span
+                className="gx-text-light gx-fs-sm"> demo user email: 'demo@example.com' and password: 'demo#123'</span>
             </Form>
           </div>
           <InfoView/>

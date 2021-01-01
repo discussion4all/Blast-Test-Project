@@ -75,7 +75,7 @@ const SignUp = (props) => {
                 <Button type="primary" className="gx-mb-0" htmlType="submit">
                   <IntlMessages id="app.userAuth.signUp"/>
                 </Button>
-                <span><IntlMessages id="app.userAuth.or"/></span> <Link to="/signin"><IntlMessages
+                <span><IntlMessages id="app.userAuth.or"/></span> <Link to="/admin/signin"><IntlMessages
                 id="app.userAuth.signIn"/></Link>
               </FormItem>
             </Form>

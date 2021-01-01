@@ -6,6 +6,8 @@ import "assets/vendors/style";
 import "styles/wieldy.less";
 import configureStore, { history } from './appRedux/store';
 import App from "./containers/App/index";
+import UserApp from "./containers/User/App/index";
+
 
 const store = configureStore(/ provide initial state if any /);
 
@@ -13,7 +15,9 @@ const NextApp = () =>
   <Provider store={store}>
     <ConnectedRouter history={history}>
       <Switch>
-        <Route path="/" component={App}/>
+      	<Route path="/admin" component={App}/>
+      	<Route path="/" component={UserApp}/>
+        
       </Switch>
     </ConnectedRouter>
   </Provider>;
