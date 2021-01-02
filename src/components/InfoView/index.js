@@ -30,8 +30,8 @@ const InfoView = () => {
       {loading && <div className="gx-loader-view gx-loader-position">
         <CircularProgress/>
       </div>}
-      {error && message.error(<span id="message-id">{error}</span>)}
-      {displayMessage && message.info(<span id="message-id">{displayMessage}</span>)}
+      {error && <span id="message-id">{error}</span>}
+      {displayMessage && <span id="message-id">{displayMessage}</span>}
     </Auxiliary>
   );
 };
