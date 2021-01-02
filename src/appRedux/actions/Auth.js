@@ -53,7 +53,7 @@ export const userSignIn = ({email, password}) => {
         password: password,
       }
     ).then((data) => {
-      console.log("userSignIn: ", data,data.headers);
+      console.log("userSignIn: ", data);
       if (data != null) {
         localStorage.setItem("token", JSON.stringify(data.headers["x-auth-token"]));
         axios.defaults.headers.common['Authorization'] = "Bearer " + data.headers["x-auth-token"];
