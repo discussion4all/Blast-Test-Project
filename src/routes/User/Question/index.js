@@ -1,11 +1,17 @@
 import React,{useState,useEffect, useRef} from "react";
-import {Button,Radio,Divider,Space} from "antd";
+import {Button,Radio,Divider,Space,Input,Form} from "antd";
 
 import IntlMessages from "../../../util/IntlMessages";
 import { Link } from "react-router-dom";
 import {  useHistory, useParams } from "react-router-dom";
 
-
+const layout = {
+  labelCol: { span: 5 },
+  wrapperCol: { span: 10 },
+};
+const tailLayout = {
+  wrapperCol: { offset: 5, span: 10 },
+};
 const QuestionPage = () => {
   	const History =  useHistory();
   	const [startloader, setStartloader] = useState(false);
@@ -29,6 +35,7 @@ const QuestionPage = () => {
 	const player = useRef();
 
 	var {session} = useParams();
+	const [form] = Form.useForm();
 	const changeExamType = async(e)=>{
 		//props.dataprops.setquizType(e.target.value)
 		//setQuestion(props.dataprops.questionData.allQuestion.Questions,e.target.value);
@@ -37,6 +44,12 @@ const QuestionPage = () => {
 	}
 	function onChange(e) {
 	  console.log(`radio checked:${e.target.value}`);
+	}
+	const checkAnswer = async()=>{
+
+	}
+	const next_Question = async()=>{
+		
 	}
 	return (
 	    <div>
@@ -49,16 +62,66 @@ const QuestionPage = () => {
 				      <div className={`gx-card-body`}>
 				      <Divider>{session}</Divider>
 				       	
-				       	{ showOptions && (
-							<>
-							    <Radio.Group onChange={(e)=>changeExamType(e)} defaultValue="a">
-							      <Radio.Button value="easytohard">Easy to Hard</Radio.Button>
-							      <Radio.Button value="hardtoeasy">Hard to Easy</Radio.Button>
-							    </Radio.Group>
-							</>
-							)
-			            }
-
+				       				            
+						<Form {...layout} form={form} name="control-hooks" >
+						  	{ showOptions && (
+								<Form.Item {...tailLayout}>
+								    <Radio.Group onChange={(e)=>changeExamType(e)} defaultValue="a">
+								      <Radio.Button value="easytohard">Easy to Hard</Radio.Button>
+								      <Radio.Button value="hardtoeasy">Hard to Easy</Radio.Button>
+								    </Radio.Group>
+								</Form.Item>
+								)
+				            }
+				           	{showQuestion &&(
+				           	    <div>
+							      <Form.Item name="note" label="Question" >
+							        <label>test</label>
+							      </Form.Item>
+							      <Form.Item name="gender" label="Answer" >
+							        <Input />
+							      </Form.Item>
+							        {isHint &&
+								      <Form.Item name="note" label="Hint" >
+								        <label>test</label>
+								      </Form.Item>
+								    }
+								    {isExplaination && 
+								    	<Form.Item name="gender" label="Explaination" >
+									        <Input />
+									    </Form.Item>	
+								    }
+							      { !answerAction &&(
+								    <Form.Item >
+								        <Button type="primary" htmlType="button" onClick={()=>setIsHint(true)}>
+								          Hint
+								        </Button>
+								        <Button htmlType="button" onClick={()=>checkAnswer()} >
+								          Submit
+								        </Button>
+							      	</Form.Item>)
+							      }
+							      { answerAction &&(
+							      	<div>
+								       	<Form.Item name="note" label="Correct Answer" >
+								       	    <label>test</label>
+								      	</Form.Item>
+								       	<Form.Item name="note" label="Your Answer" >
+								        	<label>test</label>
+								      	</Form.Item>
+								      	<Form.Item >
+									        <Button type="primary" htmlType="button" onClick={()=>setIsExplaination(true)}>
+									          Explaination
+									        </Button>
+									        <Button htmlType="button" onClick={()=>next_Question()} >
+									          Next
+									        </Button>
+									    </Form.Item>
+									</div>
+								   )}
+							    </div>
+						     )}
+					    </Form>
 				      </div>
 				    </div>
 			    </div>
