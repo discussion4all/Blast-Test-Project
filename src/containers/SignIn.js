@@ -25,7 +25,7 @@ const SignIn = (props) => {
     console.log("token",token);
     if (token !== null) {
       console.log("toke available");
-      props.history.push('/');
+      props.history.push('/admin/dashboard');
     }
   }, [token, props.history]);
 
