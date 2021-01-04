@@ -1,7 +1,10 @@
 import React,{useState,useEffect, useRef} from "react";
 import {Button,Radio,Divider,Space,Input,Form} from "antd";
+import {useDispatch, useSelector} from "react-redux";
 
 import IntlMessages from "../../../util/IntlMessages";
+import {getQuestionSet} from "../../../appRedux/actions/User/Question";
+
 import { Link } from "react-router-dom";
 import {  useHistory, useParams } from "react-router-dom";
 
@@ -14,6 +17,8 @@ const tailLayout = {
 };
 const QuestionPage = () => {
   	const History =  useHistory();
+  	const dispatch = useDispatch();
+  	const question = useSelector(({question}) => question);
   	const [startloader, setStartloader] = useState(false);
 	const [answerAction,setAnswerAction] = useState(false);
 	const [isHint,setIsHint]= useState(false);
@@ -36,6 +41,9 @@ const QuestionPage = () => {
 
 	var {session} = useParams();
 	const [form] = Form.useForm();
+	useEffect(() => {
+	    dispatch(getQuestionSet({"set" : 1}));
+	});
 	const changeExamType = async(e)=>{
 		//props.dataprops.setquizType(e.target.value)
 		//setQuestion(props.dataprops.questionData.allQuestion.Questions,e.target.value);

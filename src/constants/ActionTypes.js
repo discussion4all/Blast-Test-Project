@@ -31,3 +31,13 @@ export const INIT_URL = 'INIT_URL';
 export const USER_DATA = 'user_data';
 export const USER_TOKEN_SET = 'user_token_set';
 
+//Quiz question
+export const QUESTION_SET = 'QUESTION_SET';
+export const QUESTION_ONE = 'QUESTION_ONE';
+export const SET_ALL_QUESTION ="SET_ALL_QUESTION";
+export const SET_ONE_QUESTION = "SET_ONE_QUESTION";
+export const SET_QUIZ_TYPE = "SET_QUIZ_TYPE";
+export const SET_ALL_ANSWER = "SET_ALL_ANSWER";
+
+
+
