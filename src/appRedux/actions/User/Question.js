@@ -20,17 +20,20 @@ export const setInitUrl = (url) => {
   };
 };
 export const getQuestionSet = ({setnumber}) => {
-  console.log(setnumber);
+  
   return (dispatch) => {
     dispatch({type: FETCH_START});
-    axios.post('auth/register', {
+    console.log("localStorage.getItem('token')", localStorage.getItem("token"))
+    var token  = "Bearer " +JSON.parse(localStorage.getItem("token"))
+    axios.defaults.headers.common['authorization'] = token
+    axios.post('question/getOneQuestionSet', {
         "set": setnumber
       }
     ).then(({data}) => {
-      console.log("data:", data);
+      
       if (data.result) {
-        localStorage.setItem("token", JSON.stringify(data.token.access_token));
-        axios.defaults.headers.common['authorization'] = "Bearer " + data.token.access_token;
+        // localStorage.setItem("token", JSON.stringify(data.token.access_token));
+        // axios.defaults.headers.common['authorization'] = "Bearer " + data.token.access_token;
         dispatch({type: FETCH_SUCCESS});
         dispatch({type: SET_ALL_QUESTION, payload: data});
       } else {

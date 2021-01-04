@@ -42,7 +42,7 @@ const QuestionPage = () => {
 	var {session} = useParams();
 	const [form] = Form.useForm();
 	useEffect(() => {
-	    dispatch(getQuestionSet({"set" : 1}));
+	    dispatch(getQuestionSet({"setnumber" : datasetNumber}));
 	});
 	const changeExamType = async(e)=>{
 		//props.dataprops.setquizType(e.target.value)
